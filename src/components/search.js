@@ -1,154 +1,133 @@
-import React from 'react';
+import React,{useState} from 'react';
 import styled from 'styled-components';
 
 const SuggestionsSearchDiv = styled.div`
-	flex: 1;
-	align-self: stretch;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	font-weight: 500;
-    position: relative;
-    background-color: white;
-    input:focus{
-      outline: none;
+    background-color:white;
+    border-radius:3px 0 0 3px;
+
+    input{
+        outline:none;
+        border:none;
     }
 
-	.tag-search {
-		box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.1);
-		padding: 9px 10px;
-		height: 100%;
-		width: 100%;
-		display: flex;
-		align-self: stretch;
-		border: solid 0 $color-divider-gray;
-	}
+    .top-60{
+        top:60px;
+    }
 
-	.search-clear {
-		position: absolute; // right: 44px;
-		right: 10px !important;
-	}
+    .drop-down{
+        width:100%;
+        height:275px;
+    }
 
-	.search-results {
-		position: absolute;
-		top: 31px;
-		left: 0;
-		right: 0;
-        display: flex;
-        background-color: white;
-
-		.search-ul {
-			z-index: 999;
-			width: 100%;
-			padding: 0;
-			margin: 0;
-		}
-
-		.search-div {
-			box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-			background-color: white;
-		}
-
-		.overflow-scroll {
-			overflow: auto;
-			max-height: 300px;
-		}
-
-		.result {
-			background-color: white;
-			display: flex;
-			cursor: pointer;
-			padding: 10px;
-
-			&:hover {
-				background-color: $color-middle-gray;
-            }
-            
-            &::after {
-                display: block;
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                transform: translateX(-100%);
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
-                animation: loading 1.5s infinite;
-              }
+    .border-bottom{
+        border-bottom:solid 0.5px #d9d9d9;
+    }
+    .loader1{
+        height: 5px;
+        width: 100px;
+        background-color:#E8E8E8;
+    }
+    .loader2{
+        height: 5px;
+        width: 60px;
+        background-color:#E8E8E8;
+    }
+    .placeholder-loading::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: -150px;
+        top: 0;
+        height: 10px;
+        width: 100px;
+        background: linear-gradient(to right, transparent 0%, #ffffff 50%, transparent 100%);
+        animation: load 1.5s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+    }
+    
+    @keyframes load {
+        from {
+            left: 0px; 
         }
-    }
-    
-    position: relative;
-    background-color: #E2E2E2;
-    
-    &.card-image {
-      border-radius: 0;
-    }
-  
-    &::after {
-      display: block;
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      transform: translateX(-100%);
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
-      animation: skeleton 1.5s infinite;
+        to   {
+            left: 500px;
+        }
     }
 `;
 
 
 type Props = {
-	currentSearch: String,
-	placeholder: String,
-	enterAllowed: boolean,
-	getSuggestions: () => void,
-	suggestions: Array<any>,
-	setSuggestion: () => void,
-	clearSuggestions: () => void,
-	rightMargin: Number,
+    currentSearch: String,
+    placeholder: String,
+    enterAllowed: boolean,
+    getSuggestions: () => void,
+    suggestions: Array<any>,
+    setSuggestion: () => void,
+    clearSuggestions: () => void,
+    rightMargin: Number,
 };
 
-const SuggestionsSearch = ({ currentSearch, getSuggestions, enterAllowed, suggestions, setSuggestion, placeholder, rightMargin, clearSuggestions }: Props) => (
-	<SuggestionsSearchDiv>
-		<div className="tag-search Search-Box extra-radius">
-			<input
-				type="text"
-				className="small w-100 bg-white"
-				style={{ border: 'none' }}
-				value={currentSearch}
-				onChange={e => getSuggestions(e.target.value)}
-				onKeyDown={e => {
-					if (e.key === 'Enter' && enterAllowed) {
-						setSuggestion(e.target.value);
-					} else if (e.key === 'Escape') {
-						clearSuggestions();
-					}
-				}}
-				placeholder={placeholder}
-			/>
-		</div>
-		{currentSearch && currentSearch.length && (
-			<div className="search-clear v-center pointer" style={{ right: rightMargin }}>
-				<i className="fa fa-times-circle icon-small text-tertiary" onClick={_ => setSuggestion('')} />
-			</div>
-		)}
-		<div className="search-results">
-				<ul className="search-ul">
-					<div className="search-div small">
-		                {!suggestions.length ?
-                        [0, 0, 0, 0, 0].map((i,j) => (<li key={j} className="result skeleton" role="presentation" />))
-                        : 
-			                suggestions.map((y, j) => (
-			                	<li key={j} className="result" role="presentation" onClick={() => setSuggestion(y)}>
-			                		{y.name}
-			                	</li>
-			                ))
-                        }
-					</div>
-				</ul>
-		</div>
+const SuggestionsSearch = ({ currentSearch, getSuggestions, enterAllowed, suggestions, setSuggestion, placeholder, rightMargin, clearSuggestions }: Props) => {
 
-	</SuggestionsSearchDiv>
+    const [isFocussed,setIsFocussed] = useState(false);
+    return (
+    <SuggestionsSearchDiv className="w-100 h-100 bg-white p-20 relative flex f-space-between">
+        <input
+            className="w-100 h-100 "
+            value={currentSearch}
+            onChange={e => getSuggestions(e.target.value)}
+            onKeyDown={e => {
+                if (e.key === 'Enter' && enterAllowed) {
+                    setSuggestion(e.target.value);
+                } else if (e.key === 'Escape') {
+                    clearSuggestions();
+                }
+            }}
+            onFocus={()=>setIsFocussed(true)}
+            onBlur ={()=>setIsFocussed(false)}
+            placeholder={placeholder}
+        />
+        {currentSearch && currentSearch.length && (
+            <div className="v-center pointer" style={{ right: rightMargin }}>
+                <i className="far fa-times-circle icon-small text-secondary" onClick={_ => setSuggestion('')} />
+            </div>
+        )}
+        {isFocussed&&<div className=" drop-down absolute top-60 left-0 bg-white fcol shadow scroll-y">
+        {!!suggestions.length  &&  (
+                    suggestions.map((suggestion,i)=>(
+                        <div className="flex  w-100 bg-white ph-20 pv-10 border-bottom" key={i}>
+                            <i className="fas fa-map-marker-alt text-tertiary mr-10 mt-5" />
+                            <div className="fcol mb-10">
+                                <div className=" regular text-primary">{suggestion.name}</div>
+                                <div className="small text-secondary">{suggestion.secondary_name}</div>
+                            </div>
+                        </div>
+                    ))
+        )}
+        {
+            suggestions.length===0 && isFocussed &&(
+                <div>
+                    {currentSearch.length<2&&<div className="p-20 mb-10 text-secondary small border-bottom">
+                            Please type 1 more letter to get suggestions
+                        </div>}
+                    {
+                        new Array(5).fill(0).map((x,i)=>(
+                            
+                            <div className="flex  w-100 bg-white ph-20 pv-10 border-bottom" key={i}>
+                            <i className="fas fa-map-marker-alt text-tertiary mr-10" />
+                            <div className="fcol mb-10 ">
+                                <div className=" regular text-primary relative loader1 " style={{height:"10px",width:"500px"}}><div className="placeholder-loading" /></div>
+                                <div className="small text-secondary relative loader2" style={{height:"10px",width:"500px"}}><div className="placeholder-loading" /></div>
+                            </div>
+                        </div>
+                        ))
+                    }
+                </div>
+            ) 
+        }
+        </div>}
+
+    </SuggestionsSearchDiv>
 );
+}
 
 export default SuggestionsSearch;

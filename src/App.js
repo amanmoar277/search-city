@@ -4,34 +4,22 @@ import { getCities } from './helper';
 import SuggestionsSearch from './components/search';
 import styled from 'styled-components';
 
-// const SearchBar = styled.input`
-//   width: 45%;
-//   background-color: white;
-//   position: absolute:
-//   top: 40%;
-//   min-width: 200px;
-//   border: none;
-//   border-radius: 3px 0 0 3px;
-//   padding: 20px;
-//   :focus{
-//     outline: none;
-//   }
-// `;
-
 const SearchButton = styled.button`
-  width: 15%;
+  width: 20%;
+  height:100%;
   background-color: #e8415d;
-  position: absolute:
-  top: 40%;
   padding-left: 10px;
-  border: none;
+  border:none;
   min-width: 100px;
   display: block;
-  font-color: white;
-  border-radius: 2px 2px 0;
-  :focus{
-    outline: none;
-  }
+  color: white;
+  border-radius: 0 2px 2px 0;
+`;
+
+
+const ImageContainer = styled.div`
+  height:${props=>props.height};
+  width:${props=>props.width};
 `;
 
 function App() {
@@ -63,46 +51,39 @@ function App() {
     } else
       getCitiesData();
   }
-
-  // const removeSuggestion = () => {
-  //   setCityName('');
-  // }
-
   return (
-    <div className="bg-image">
-      <div className="flex-container">
-        <SuggestionsSearch
-			  	currentSearch={cityName}
-			  	getSuggestions={setInput}
-			  	setSuggestion={text => setInput(text)}
-			  	suggestions={cityList}
-			  	clearSuggestions={_ => setInput('')}
-			  	placeholder="Search By College Or City"
-			  	rightMargin={'44px'}
-			  	suggestType
-			  	enterAllowed
-          onChange={cityName => setInput(cityName)}
-			  />
-
-        <SearchButton
-          onClick={onSubmit}
-          className="white"
-        >
-          <i className="fas fa-search mr10"></i>
-          Search
-        </SearchButton>
+  <div className="">
+    <ImageContainer className="relative" height="70vh" width="100%">
+      <img height="100%" width="100%" className="object-fit-cover" src='https://static-assets-amberstudent.imgix.net/images/header_home_1.jpg' alt="cover"/>
+      <div className="absolute top-50 left-0 w-100 h-100 z-1">
+        <div className="w-100 h-100 h-center flex" >
+          <div className="flex w-100 h-60 h-center" style={{width:"58%"}}>
+            <div className="h-100" style={{width:"80%"}}>
+              <SuggestionsSearch
+                    currentSearch={cityName}
+                    getSuggestions={setInput}
+                    setSuggestion={text => setInput(text)}
+                    suggestions={cityList}
+                    clearSuggestions={_ => setInput('')}
+                    placeholder="Search By College Or City"
+                    rightMargin={'44px'}
+                    suggestType
+                    enterAllowed
+                    onChange={cityName => setInput(cityName)}
+                  />
+              </div>
+              <SearchButton
+                onClick={onSubmit}
+                className="white h6 pointer"
+              >
+                <i className="fas fa-search mr10"></i>
+                Search
+              </SearchButton>
+          </div>
+        </div>
       </div>
-
-
-
-
-      {/* <ul>
-        { cityList.length > 0 && cityList.map(city => <li>{city.name}</li>)}
-      </ul>
-      <ul>
-        { searchedCities.length > 0 && searchedCities.map(cityName => <li style={{color:'red'}}>{cityName}</li>)}
-      </ul> */}
-    </div>
+    </ImageContainer>
+  </div>
   );
 }
 
