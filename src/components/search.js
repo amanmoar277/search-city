@@ -94,13 +94,15 @@ const SuggestionsSearch = ({ currentSearch, getSuggestions, enterAllowed, sugges
         {isFocussed&&<div className=" drop-down absolute top-60 left-0 bg-white fcol shadow scroll-y">
         {!!suggestions.length  &&  (
                     suggestions.map((suggestion,i)=>(
-                        <div className="flex  w-100 bg-white ph-20 pv-10 border-bottom" key={i}>
-                            <i className="fas fa-map-marker-alt text-tertiary mr-10 mt-5" />
-                            <div className="fcol mb-10">
-                                <div className=" regular text-primary">{suggestion.name}</div>
-                                <div className="small text-secondary">{suggestion.secondary_name}</div>
-                            </div>
-                        </div>
+						<a href={`https://amberstudent.com/places/search/${suggestion.canonical_name}`} className="a" key={i} onClick={_ => console.log('click') || window.location.assign(`https://amberstudent.com/places/search/${suggestion.canonical_name}`)}>
+                        	<div className="flex  w-100 bg-white ph-20 pv-10 border-bottom pointer" >
+                        	    <i className="fas fa-map-marker-alt text-tertiary mr-10" />
+                        	    <div className="fcol mb-10">
+                        	        <div className=" regular text-primary">{suggestion.name}</div>
+                        	        <div className="small text-secondary">{suggestion.secondary_name}</div>
+                        	    </div>
+                        	</div>
+						</a>
                     ))
         )}
         {
@@ -114,7 +116,7 @@ const SuggestionsSearch = ({ currentSearch, getSuggestions, enterAllowed, sugges
                             
                             <div className="flex  w-100 bg-white ph-20 pv-10 border-bottom" key={i}>
                             <i className="fas fa-map-marker-alt text-tertiary mr-10" />
-                            <div className="fcol mb-10 ">
+                            <div className="fcol mb-10 hidden">
                                 <div className=" regular text-primary relative loader1 " style={{height:"10px",width:"500px"}}><div className="placeholder-loading" /></div>
                                 <div className="small text-secondary relative loader2" style={{height:"10px",width:"500px"}}><div className="placeholder-loading" /></div>
                             </div>
