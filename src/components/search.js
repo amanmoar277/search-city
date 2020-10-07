@@ -64,9 +64,10 @@ type Props = {
     setSuggestion: () => void,
     clearSuggestions: () => void,
     rightMargin: Number,
+    history: Array<any>,
 };
 
-const SuggestionsSearch = ({ currentSearch, getSuggestions, enterAllowed, suggestions, setSuggestion, placeholder, rightMargin, clearSuggestions }: Props) => {
+const SuggestionsSearch = ({ currentSearch, getSuggestions, enterAllowed, suggestions, setSuggestion, placeholder, rightMargin, clearSuggestions, history }: Props) => {
 
     const [isFocussed,setIsFocussed] = useState(false);
     return (
@@ -74,7 +75,7 @@ const SuggestionsSearch = ({ currentSearch, getSuggestions, enterAllowed, sugges
         <input
             className="w-100 h-100 "
             value={currentSearch}
-            onChange={e => getSuggestions(e.target.value)}
+            onChange={e => console.log(e.target.value) || getSuggestions(e.target.value)}
             onKeyDown={e => {
                 if (e.key === 'Enter' && enterAllowed) {
                     setSuggestion(e.target.value);
@@ -109,7 +110,7 @@ const SuggestionsSearch = ({ currentSearch, getSuggestions, enterAllowed, sugges
             suggestions.length===0 && isFocussed &&(
                 <div>
                     {currentSearch.length<2&&<div className="p-20 mb-10 text-secondary small border-bottom">
-                            Please type 1 more letter to get suggestions
+                            Please type {2 - currentSearch.length} more letter to get new suggestions
                         </div>}
                     {
                         new Array(5).fill(0).map((x,i)=>(

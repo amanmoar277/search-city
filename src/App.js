@@ -27,7 +27,7 @@ function App() {
   const [ cityList, setCityList ] = useState([]);
   const [ searchedCities, setSearchedCities ] = useState([]);
 
-  const getCitiesData = () => {     
+  const getCitiesData = (cityName) => {     
     if(cityName.length > 1) {
       getCities(cityName.toLowerCase()).then(res => {
         setCityList(res.slice(1,6));
@@ -37,7 +37,7 @@ function App() {
 
   const onSubmit = () => {
     if(cityName.length > 1) {
-      getCitiesData();
+      getCitiesData(cityName);
       if(!searchedCities.includes(cityName)) {
         setSearchedCities([{ name: cityName }, ...searchedCities]);
       }
@@ -49,7 +49,7 @@ function App() {
     if(cityName === '') {
       setCityList([]);
     } else
-      getCitiesData();
+      getCitiesData(cityName);
   }
   return (
   <div className="">
